@@ -12,7 +12,7 @@ class CreditCardForm {
   private static instance: CreditCardForm;
 
   private constructor(paymentData: PaymentData, jsonData?: PaymentJsonData) {
-    CreditCardFormManager.initialPaymentData(paymentData, jsonData);
+    CreditCardForm.saveInitialPaymentData(paymentData, jsonData);
   }
 
   public static initialPaymentData(
@@ -23,12 +23,18 @@ class CreditCardForm {
       CreditCardForm.instance = new CreditCardForm(paymentData, jsonData);
     }
 
+    CreditCardForm.saveInitialPaymentData(paymentData, jsonData);
     return CreditCardForm.instance;
   }
 
   public setTotalAmount({ totalAmount, currency }: TotalAmount): void {
     CreditCardFormManager.setTotalAmount(totalAmount, currency);
   }
+
+  private static saveInitialPaymentData(paymentData: PaymentData, jsonData?: PaymentJsonData): void {
+    CreditCardFormManager.initialPaymentData(paymentData, jsonData);
+  }
+
 
   public showCreditCardForm = async ({
     disableApplePay,

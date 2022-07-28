@@ -12,8 +12,7 @@ class CreditCardForm {
   private static instance: CreditCardForm;
 
   private constructor(paymentData: PaymentData, jsonData?: PaymentJsonData) {
-    const jsonDataString = jsonData && JSON.stringify(jsonData);
-    CreditCardFormManager.initialPaymentData(paymentData, jsonDataString);
+    CreditCardForm.saveInitialPaymentData(paymentData, jsonData)
   }
 
   public static initialPaymentData(
@@ -24,11 +23,17 @@ class CreditCardForm {
       CreditCardForm.instance = new CreditCardForm(paymentData, jsonData);
     }
 
+    CreditCardForm.saveInitialPaymentData(paymentData, jsonData)
     return CreditCardForm.instance;
   }
 
   public setTotalAmount({ totalAmount, currency }: TotalAmount): void {
     CreditCardFormManager.setTotalAmount(totalAmount, currency);
+  }
+
+  private static saveInitialPaymentData(paymentData: PaymentData, jsonData?: PaymentJsonData): void {
+    const jsonDataString = jsonData && JSON.stringify(jsonData);
+    CreditCardFormManager.initialPaymentData(paymentData, jsonDataString);
   }
 
   public showCreditCardForm = async ({
