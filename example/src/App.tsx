@@ -62,26 +62,11 @@ const PRODUCTS = [
 
 const PAYMENT_DATA_CARD = {
   publicId: 'publicId',
-  accountId: '1202',
-  applePayMerchantId: 'merchant',
-  description: 'Test',
-  ipAddress: '8.8.8.8',
-  invoiceId: '123',
-  cardHolderName: 'Votinov Anton',
-};
-
-const PAYMENT_JSON_DATA_CARD = {
-  age: '24',
-  name: 'Anton',
-  phone: '+7912343569',
 };
 
 const paymentService = PaymentService.initial(PAYMENT_DATA);
 
-const creditCardForm = CreditCardForm.initialPaymentData(
-  PAYMENT_DATA_CARD,
-  PAYMENT_JSON_DATA_CARD
-);
+const creditCardForm = CreditCardForm.initialPaymentData(PAYMENT_DATA_CARD);
 
 const App = () => {
   const [isSupportPayments, setIsSupportPayments] = useState(false);
@@ -110,15 +95,15 @@ const App = () => {
   };
 
   const onPayWithCard = async () => {
-    creditCardForm.setTotalAmount({
+    creditCardForm.setDetailsOfPayment({
       currency: Currency.ruble,
-      totalAmount: '100',
+      totalAmount: '1000',
+      invoiceId: '123',
+      description: 'Test',
     });
 
     const result = await creditCardForm.showCreditCardForm({
       useDualMessagePayment: true,
-      disableApplePay: true,
-      disableGPay: true,
     });
 
     console.warn(result);

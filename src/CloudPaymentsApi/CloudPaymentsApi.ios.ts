@@ -1,8 +1,8 @@
 import {
-  PaymentData,
+  PaymentDataApi,
   PaymentJsonData,
   TransactionResponse,
-  TotalAmount,
+  DetailsOfPayment,
 } from '../types';
 import { NativeModules } from 'react-native';
 
@@ -11,12 +11,12 @@ const { CloudPaymentsApi: CloudPaymentsApiModule } = NativeModules;
 class CloudPaymentsApi {
   private static instance: CloudPaymentsApi;
 
-  private constructor(paymentData: PaymentData, jsonData?: PaymentJsonData) {
+  private constructor(paymentData: PaymentDataApi, jsonData?: PaymentJsonData) {
     CloudPaymentsApiModule.initApi(paymentData, jsonData);
   }
 
   public static initialApi(
-    paymentData: PaymentData,
+    paymentData: PaymentDataApi,
     jsonData?: PaymentJsonData
   ): CloudPaymentsApi {
     if (!CloudPaymentsApi.instance) {
@@ -26,8 +26,8 @@ class CloudPaymentsApi {
     return CloudPaymentsApi.instance;
   }
 
-  public setTotalAmount({ totalAmount, currency }: TotalAmount): void {
-    CloudPaymentsApiModule.setTotalAmount(totalAmount, currency);
+  public setDetailsOfPayment(details: DetailsOfPayment): void {
+    CloudPaymentsApiModule.setDetailsOfPayment(details);
   }
 
   public auth = async (

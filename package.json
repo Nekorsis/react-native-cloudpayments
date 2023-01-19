@@ -1,6 +1,6 @@
 {
   "name": "react-native-cloudpayments-sdk",
-  "version": "2.1.1",
+  "version": "2.3.0",
   "description": "CloudPayments SDK for React Native",
   "main": "src/index",
   "types": "src/index.d.ts",
@@ -33,14 +33,13 @@
   },
   "keywords": [
     "react-native",
-    "purrweb",
     "cloudpayments",
     "sdk",
     "ios",
     "android"
   ],
   "repository": "https://github.com/PurrwebTeam/react-native-cloudpayments",
-  "author": "Votinov Anton <antonvotinov@gmail.com> (https://github.com/Anton-1408)",
+  "author": "Anton Votinov <antonvotinov@gmail.com> (https://github.com/Anton-1408)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/PurrwebTeam/react-native-cloudpayments/issues"

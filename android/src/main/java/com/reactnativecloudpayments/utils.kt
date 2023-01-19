@@ -9,9 +9,12 @@ data class InitialPaymentData(var paymentData: ReadableMap) {
   var publicId: String = paymentData.getString("publicId") as String;
   var accountId: String? = paymentData.getString("accountId");
   var description: String? = paymentData.getString("description");
-  var ipAddress: String  = paymentData.getString("ipAddress") as String;
+  var ipAddress: String?  = paymentData.getString("ipAddress");
   var invoiceId: String? = paymentData.getString("invoiceId");
-  var cardHolderName: String = paymentData.getString("cardHolderName") as String;
+  var cardHolderName: String? = paymentData.getString("cardHolderName");
+  var yandexPayMerchantID: String? = paymentData.getString("yandexPayMerchantID");
+  var cultureName: String? = paymentData.getString("cultureName");
+  var payer: String? = paymentData.getString("payer")
 
   lateinit var jsonDataHash: HashMap<String, Any>
 

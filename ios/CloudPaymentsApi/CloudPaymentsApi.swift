@@ -4,6 +4,8 @@ import Cloudpayments;
 
 @objc(CloudPaymentsApi)
 class CloudPaymentsApi: NSObject {
+  @objc var bridge: RCTBridge!
+
   var api: CloudpaymentsApi?;
   var paymentData: PaymentData?;
 
@@ -15,21 +17,28 @@ class CloudPaymentsApi: NSObject {
 
     self.paymentData = PaymentData.init(publicId: initialData.publicId)
       .setAccountId(initialData.accountId)
-      .setDescription(initialData.description)
       .setApplePayMerchantId(initialData.applePayMerchantId)
       .setIpAddress(initialData.ipAddress)
-      .setInvoiceId(initialData.invoiceId)
       .setCardholderName(initialData.cardholderName)
       .setJsonData(initialData.jsonData!)
+      .setCultureName(initialData.cultureName)
+      .setPayer(initialData.payer)
   }
 
   @objc
-  func setTotalAmount(_ totalAmount: String, currency: String) -> Void {
+  func setDetailsOfPayment(_ details: Dictionary<String, String>) -> Void {
+    let description = details["description"];
+    let invoiceId = details["invoiceId"];
+    let totalAmount = details["totalAmount"]!;
+    let currency = details["currency"]!
+
     let currencyValue = Currency.init(rawValue: currency)!;
 
     guard let _ = self.paymentData?
             .setCurrency(currencyValue)
             .setAmount(totalAmount)
+            .setDescription(description)
+            .setInvoiceId(invoiceId)
     else {
         return
     };
@@ -90,5 +99,15 @@ class CloudPaymentsApi: NSObject {
     let jsonString = String(data: jsonData, encoding: .utf8)
 
     return jsonString ?? "Response is empty";
+  }
+
+  @objc
+  static func requiresMainQueueSetup() -> Bool {
+    return true
+  }
+
+  @objc
+  func methodQueue() -> DispatchQueue {
+    return .main
   }
 }

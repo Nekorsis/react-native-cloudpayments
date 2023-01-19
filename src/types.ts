@@ -32,18 +32,30 @@ export interface MethodDataPayment {
 
 export interface PaymentData {
   publicId: string;
-  accountId: string;
-  applePayMerchantId: string;
+  applePayMerchantId?: string;
   googlePayMerchantId?: string;
-  description?: string;
-  ipAddress: string;
-  invoiceId?: string;
-  cardHolderName: string;
+  yandexPayMerchantID?: string;
+  ipAddress?: string;
+  accountId?: string;
+  cardHolderName?: string;
+  cultureName?: string;
+  payer?: string;
 }
 
-export interface TotalAmount {
+export type PaymentDataApi = Omit<
+  PaymentData,
+  | 'applePayMerchantId'
+  | 'googlePayMerchantId'
+  | 'cultureName'
+  | 'payer'
+  | 'yandexPayMerchantID'
+>;
+
+export interface DetailsOfPayment {
   totalAmount: string;
   currency: Currency;
+  invoiceId?: string;
+  description?: string;
 }
 
 export interface PaymentJsonData {
@@ -54,8 +66,9 @@ export interface PaymentJsonData {
 
 export interface Configuration {
   useDualMessagePayment: boolean;
-  disableApplePay: boolean;
-  disableGPay: boolean;
+  disableApplePay?: boolean;
+  disableGPay?: boolean;
+  disableYandexPay?: boolean;
 }
 
 type EnvironmentRunningGooglePay = 'Test' | 'Production';

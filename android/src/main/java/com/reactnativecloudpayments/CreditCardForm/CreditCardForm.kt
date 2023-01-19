@@ -34,7 +34,7 @@ class CreditCardForm(reactContext: ReactApplicationContext): ReactContextBaseJav
         if (transactionStatus == CloudpaymentsSDK.TransactionStatus.Succeeded) {
           this.promise.resolve(transactionId);
         } else {
-          val reasonCode = data.getIntExtra(CloudpaymentsSDK.IntentKeys.TransactionReasonCode.name, 0) ?: 0
+          val reasonCode = data.getIntExtra(CloudpaymentsSDK.IntentKeys.TransactionReasonCode.name, 0);
 
           if (reasonCode > 0) {
             this.promise.reject(reasonCode.toString(), "Ошибка! Транзакция №$transactionId.");
@@ -63,17 +63,26 @@ class CreditCardForm(reactContext: ReactApplicationContext): ReactContextBaseJav
   }
 
   @ReactMethod
-  fun setTotalAmount(totalAmount: String, currency: String) {
+  fun setDetailsOfPayment(details: ReadableMap) {
+    val totalAmount = details.getString("totalAmount") as String;
+    val currency = details.getString("currency") as String;
+    val description = details.getString("description");
+    val invoiceId = details.getString("invoiceId");
+
     paymentDataInitialValues.totalAmount = totalAmount;
     paymentDataInitialValues.currency = currency;
+    paymentDataInitialValues.description = description;
+    paymentDataInitialValues.invoiceId = invoiceId;
   }
 
   @ReactMethod
   fun showCreditCardForm(initialConfiguration: ReadableMap, promise: Promise) {
     this.promise = promise;
 
-    val disableGPay = initialConfiguration.getBoolean("disableGPay")
-    val useDualMessagePayment = initialConfiguration.getBoolean("useDualMessagePayment")
+    val disableGPay = initialConfiguration.getBoolean("disableGPay");
+    val useDualMessagePayment = initialConfiguration.getBoolean("useDualMessagePayment");
+    val disableYandexPay = initialConfiguration.getBoolean("disableYandexPay");
+    val yandexPayMerchantID = paymentDataInitialValues.yandexPayMerchantID ?: "";
 
     val paymentData = PaymentData(
       paymentDataInitialValues.publicId,
@@ -81,17 +90,21 @@ class CreditCardForm(reactContext: ReactApplicationContext): ReactContextBaseJav
       currency = paymentDataInitialValues.currency,
       invoiceId = paymentDataInitialValues.invoiceId,
       accountId = paymentDataInitialValues.accountId,
-      ipAddress = paymentDataInitialValues.ipAddress,
+      ipAddress = paymentDataInitialValues.ipAddress ?: "",
       description = paymentDataInitialValues.description,
-      cardholderName = paymentDataInitialValues.cardHolderName,
-      jsonData = paymentDataInitialValues.jsonDataHash
+      cardholderName = paymentDataInitialValues.cardHolderName ?: "",
+      jsonData = paymentDataInitialValues.jsonDataHash,
+      cultureName = paymentDataInitialValues.cultureName,
+      payer = paymentDataInitialValues.payer
     )
 
     val configuration = PaymentConfiguration(
       paymentData,
       CardIOScanner(),
       useDualMessagePayment,
-      disableGPay
+      disableGPay,
+      disableYandexPay,
+      yandexPayMerchantID
     )
 
     val appCompatActivity = currentActivity as AppCompatActivity;
